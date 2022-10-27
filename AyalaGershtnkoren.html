@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Ayala Gershtnkoren project</title>
+    <script>
+        //The data from the server - array of objects
+        var items = [
+            {
+                "id": "1",
+                "name": "google",
+                "url": "www.google.com",
+                "subData": [
+                    {
+                        "id": "2",
+                        "name": "walla",
+                        "url": "www.walla.co.il"
+                    },
+                    {
+                        "id": "3",
+                        "name": "ynet",
+                        "url": "www.ynet.co.il",
+                        "subData": [
+                            {
+                                "id": "4",
+                                "name": "mako",
+                                "url": "www.mako.co.il"
+                            },
+                            {
+                                "id": "5",
+                                "name": "google",
+                                "url": "www.google.com"
+                            },
+                            {
+                                "id": "6",
+                                "name": "walla",
+                                "url": "www.walla.co.il"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "7",
+                        "name": "google",
+                        "url": "www.google.com"
+                    }
+                ]
+            },
+            {
+                "id": "8",
+                "name": "ynet",
+                "url": "www.ynet.co.il",
+                "subData": [
+                    {
+                        "id": "9",
+                        "name": "walla",
+                        "url": "www.walla.co.il"
+                    },
+                    {
+                        "id": "10",
+                        "name": "google",
+                        "url": "www.google.com",
+                        "subData": [
+                            {
+                                "id": "11",
+                                "name": "ynet",
+                                "url": "www.ynet.co.il",
+                                "subData": [
+                                    {
+                                        "id": "12",
+                                        "name": "walla",
+                                        "url": "www.walla.co.il"
+                                    },
+                                    {
+                                        "id": "13",
+                                        "name": "google",
+                                        "url": "www.google.com"
+                                    },
+                                    {
+                                        "id": "14",
+                                        "name": "mako",
+                                        "url": "www.mako.co.il"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "15",
+                                "name": "google",
+                                "url": "www.google.com"
+                            },
+                            {
+                                "id": "16",
+                                "name": "mako",
+                                "url": "www.mako.co.il"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "17",
+                        "name": "walla",
+                        "url": "www.walla.co.il",
+                        "subData": [
+                            {
+                                "id": "18",
+                                "name": "ynet",
+                                "url": "www.ynet.co.il"
+                            },
+                            {
+                                "id": "19",
+                                "name": "google",
+                                "url": "www.google.com"
+                            },
+                            {
+                                "id": "20",
+                                "name": "walla",
+                                "url": "www.walla.co.il"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "21",
+                        "name": "mako",
+                        "url": "www.mako.co.il"
+                    }
+                ]
+            }
+        ];
+
+        //Array of colors to the display
+        var colors = ['#ADD8E6', '#87CEFA', '#D3D3D3', '#FFA07A'];
+
+        //A global varible for the new tabs
+        var number = 1;
+
+        //The main function that runs the recursive function
+        const start = () => {
+            //To make sure the operation is done once
+            document.getElementById("myBtn").style.display = 'none';
+
+            for (let index = 0; index < items.length; index++) {
+                //The call to the recursive function
+                const element = recursion(items[index], 0);
+
+                //For the style
+                element.id = "element";
+
+                //The document append the main divs
+                document.body.appendChild(element);
+            }
+        }
+
+        //The recursion method get two parameters:A member of the array, And the stage to the display
+        const recursion = (item, stage) => {
+            //Create the main div
+            let div = document.createElement('div');
+
+            //The background color style
+            let color = stage * 102;
+            if (stage <= 3) {
+                div.style.backgroundColor = colors[stage];
+            }
+            else {
+                div.style.backgroundColor = `rgb(${256 - 1.5 * color},${color},${color / 2})`;
+            }
+
+            //Create the id label
+            let id = document.createElement('label');
+            id.innerText = `Id:${item.id}`;
+
+            //Create the name label
+            let name = document.createElement('label');
+            name.innerText = `Site Name:${item.name}`;
+
+            //Create the site url link
+            let siteUrl = document.createElement('a');
+            siteUrl.innerText = `Site Url:${item.name}`;
+
+            //A link to the appropriate site
+            siteUrl.href = "https://" + item.url;
+
+            //To redirect on a new page to the appropriate website
+            siteUrl.target = `newwin${number}`;
+            number++;
+
+            //Append the elements: id, name, site url
+            div.appendChild(id);
+            div.innerHTML += '<br/>';
+            div.appendChild(name);
+            div.innerHTML += '<br/>';
+            div.appendChild(siteUrl);
+            div.innerHTML += '<br/>';
+
+            let items = item.subData;
+            //Send to the recursion method while there is sub data
+            if (items != undefined) {
+                for (let index = 0; index < items.length; index++) {
+                    const element = recursion(items[index], stage + 1);
+                    div.appendChild(element);
+                }
+            }
+            return div;
+        }
+    </script>
+    <style>
+        div {
+            border: 1.5px solid green;
+            margin-left: 40px;
+            border-radius: 25px;
+            padding: 6px 6px 2px 10px;
+            margin-bottom: 5px;
+        }
+
+        #element {
+            margin-left: 15px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="start()" id="myBtn">click me!</button>
+</body>
+</html>
